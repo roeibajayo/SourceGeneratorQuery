@@ -3,7 +3,7 @@
 version: 2.1
 
 orbs:
-  win: circleci/windows@2.4
+  windows: circleci/windows@2.4
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -16,11 +16,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "remove examples"
+          command: "rmdir src\examples /s /q"
+      - run:
           name: "Pack"
-          command: "dotnet pack --configuration Release"
+          command: "dotnet.exe pack --configuration Release"
       - run:
           name: Push generated package to GitHub registry
-          command: dotnet nuget push ./<project>/src/bin/release/*.nupkg --skip-duplicate --no-symbols true
+          command: dotnet.exe nuget push ./<project>/src/bin/release/*.nupkg --skip-duplicate --no-symbols true
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
