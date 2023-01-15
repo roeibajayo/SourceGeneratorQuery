@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0</Version>
+    <Authors>roeibajayo@gmail.com</Authors>
+    <PackageId>SourceGeneratorQuery</PackageId>
+    <Company>RoeiBajayo</Company>
+    <Title>SourceGeneratorQuery</Title>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/roeibajayo/SourceGeneratorQuery</PackageProjectUrl>
+    <Description>C# SourceGenerator Helper, which helps you query your files</Description>
+    <RepositoryUrl>https://github.com/roeibajayo/SourceGeneratorQuery</RepositoryUrl>
+    <PackageTags>Source Generator,SourceGenerator,Query,Helper</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
