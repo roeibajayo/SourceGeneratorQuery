@@ -1,0 +1,6 @@
+# Build and Release Folders
+[Oo]bj/
+[Bb]in/
+.vs/
+**.user
+/Properties/PublishProfiles/
