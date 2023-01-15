@@ -136,6 +136,11 @@ namespace SourceGeneratorBuilder.Declarations
 
     public static class TypeDeclarationExtentions
     {
+        public static IEnumerable<TypeDeclaration> WithMethods(this IEnumerable<TypeDeclaration> source,
+            Func<MethodDeclaration, bool> predicate)
+        {
+            return source.Where(x => x.GetMethods().Any(m => predicate(m)));
+        }
         public static IEnumerable<TypeDeclaration> WithName(this IEnumerable<TypeDeclaration> source,
             Func<string, bool> predicate)
         {
