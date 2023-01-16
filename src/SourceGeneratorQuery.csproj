@@ -2,18 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>roeibajayo@gmail.com</Authors>
     <PackageId>SourceGeneratorQuery</PackageId>
     <Company>RoeiBajayo</Company>
     <Title>SourceGeneratorQuery</Title>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/roeibajayo/SourceGeneratorQuery</PackageProjectUrl>
-    <Description>C# SourceGenerator Helper, which helps you query your files</Description>
+    <Description>C# SourceGenerator helper which helps you query your files, and adds LINQ support</Description>
     <RepositoryUrl>https://github.com/roeibajayo/SourceGeneratorQuery</RepositoryUrl>
     <PackageTags>Source Generator,SourceGenerator,Query,Helper</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)'!='Debug'">
+    <Compile Remove="examples\GetAllEnums.cs" />
+    <Compile Remove="examples\GetClassesWithAttribute.cs" />
+    <Compile Remove="examples\GetMethodsWithPathAndClassName.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'!='Debug'">
+    <None Include="examples\GetAllEnums.cs" />
+    <None Include="examples\GetClassesWithAttribute.cs" />
+    <None Include="examples\GetMethodsWithPathAndClassName.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" PrivateAssets="all" />

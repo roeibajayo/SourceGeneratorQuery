@@ -1,21 +1,22 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SourceGeneratorBuilder.Declarations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SourceGeneratorBuilder.Declarations
+namespace SourceGeneratorQuery.Declarations
 {
     public class MethodDeclaration
     {
-        public MethodDeclaration(BaseMethodDeclarationSyntax node)
+        public MethodDeclaration(BaseMethodDeclarationSyntax node, MethodDeclaration parent)
         {
-            this.node = node;
+            this.SyntaxNode = node;
+            Parent = parent;
         }
 
-        private readonly BaseMethodDeclarationSyntax node;
+        public readonly BaseMethodDeclarationSyntax SyntaxNode;
+        public readonly MethodDeclaration Parent;
 
         public bool IsPublic
         {
@@ -51,18 +52,18 @@ namespace SourceGeneratorBuilder.Declarations
         public bool IsAsync =>
             Modifiers.Contains("async");
         public IEnumerable<string> Modifiers =>
-            node.Modifiers.Select(x => x.Text);
+            SyntaxNode.Modifiers.Select(x => x.Text);
 
         public string Name
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case MethodDeclarationSyntax method:
                         return method.Identifier.ToString();
                 }
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case ConstructorDeclarationSyntax method:
                         return method.Identifier.ToString();
@@ -72,7 +73,7 @@ namespace SourceGeneratorBuilder.Declarations
             }
             set
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case MethodDeclarationSyntax method:
                         method.WithIdentifier(SyntaxFactory.Identifier(""));
@@ -85,7 +86,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case MethodDeclarationSyntax method:
                         return method.ReturnType.ToString();
@@ -97,7 +98,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case MethodDeclarationSyntax method:
                         return method.ReturnType.IsNotNull;
@@ -105,11 +106,58 @@ namespace SourceGeneratorBuilder.Declarations
                 return false;
             }
         }
-        public IEnumerable<AttributeDeclaration> Attributes => node.AttributeLists
+        public IEnumerable<AttributeDeclaration> Attributes => SyntaxNode.AttributeLists
             .SelectMany(x => x.Attributes.Select(a => new AttributeDeclaration(a)));
         public IEnumerable<ParameterDeclaration> Parameters =>
-            node.ParameterList.Parameters.Select(p => new ParameterDeclaration(p));
+            SyntaxNode.ParameterList.Parameters.Select(p => new ParameterDeclaration(p));
         public string Body =>
-            node.Body.GetText().ToString();
+            SyntaxNode.Body.GetText().ToString();
+    }
+
+    public static class MethodDeclarationExtentions
+    {
+        public static IEnumerable<MethodDeclaration> WithName(this IEnumerable<MethodDeclaration> source,
+            Func<string, bool> predicate)
+        {
+            return source.Where(x => predicate(x.Name));
+        }
+        public static IEnumerable<MethodDeclaration> WithAttribute(this IEnumerable<MethodDeclaration> source,
+            Func<AttributeDeclaration, bool> predicate)
+        {
+            return source.Where(x => x.Attributes.Any(a => predicate(a)));
+        }
+        public static IEnumerable<MethodDeclaration> WithAttribute(this IEnumerable<MethodDeclaration> source,
+            string name)
+        {
+            return source.Where(x => x.Attributes.Any(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+        }
+        public static IEnumerable<MethodDeclaration> WithPublic(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsPublic);
+        }
+        public static IEnumerable<MethodDeclaration> WithProtected(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsProtected);
+        }
+        public static IEnumerable<MethodDeclaration> WithInternal(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsInternal);
+        }
+        public static IEnumerable<MethodDeclaration> WithPrivate(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsPrivate);
+        }
+        public static IEnumerable<MethodDeclaration> WithReadonly(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsReadonly);
+        }
+        public static IEnumerable<MethodDeclaration> WithStatic(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsStatic);
+        }
+        public static IEnumerable<MethodDeclaration> WithAbstract(this IEnumerable<MethodDeclaration> source)
+        {
+            return source.Where(x => x.IsAbstract);
+        }
     }
 }

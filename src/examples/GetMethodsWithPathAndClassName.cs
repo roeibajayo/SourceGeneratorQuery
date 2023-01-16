@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
-using SourceGeneratorBuilder;
-using SourceGeneratorBuilder.Declarations;
+using SourceGeneratorQuery.Declarations;
 using System.Diagnostics;
 using System.Linq;
 
@@ -15,17 +14,24 @@ namespace SourceGeneratorQuery.examples
         public void Execute(GeneratorExecutionContext context)
         {
             var classes = context
-                .NewQuery()
-                .WithPath("./Social")
+                .NewQuery() // start new query
+                .WithPath("./Social") // filter search on specific path
                 .GetClasses()
-                .WithName(x => x.EndsWith("Client"));
+                .WithName(x => x.EndsWith("Client")); // classes ends with 'Client'
 
+            var syntaxNodes = classes.Select(x => x.SyntaxNode); // get the syntax nodes if you want
+
+            // example of iteration
             foreach (var c in classes)
             {
-                var methods = c.GetMethods()
-                            .Where(x => x.IsPublic && (x.Name.StartsWith("Push") || x.Name.StartsWith("Get")));
+                var publicMethodsWithMyAttributeAndStartsWithGet = c.GetMethods()
+                            .WithAttribute("MyAttribute")
+                            .WithPublic()
+                            .WithName(name => name.StartsWith("Get"));
 
-                var stringify = methods
+                var methodsSyntaxNodes = publicMethodsWithMyAttributeAndStartsWithGet.Select(x => x.SyntaxNode);
+
+                var stringifyMethods = publicMethodsWithMyAttributeAndStartsWithGet
                     .Select(x => $"{string.Join(" ", x.Modifiers)} {x.Name}({string.Join(", ", x.Parameters.Select(p => $"{p.Type} {p.Name}"))})")
                     .ToArray();
             }

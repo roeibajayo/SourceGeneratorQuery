@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
-using SourceGeneratorBuilder;
-using SourceGeneratorBuilder.Declarations;
+using SourceGeneratorQuery.Declarations;
+using System;
 using System.Diagnostics;
 using System.Linq;
 
@@ -11,11 +11,14 @@ namespace SourceGeneratorQuery.examples
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var files = context
-                .NewQuery()
-                .GetClasses()
-                .WithAttribute("MyAttributeName") // return classes
-                .Select(c => c.SourceFile); // return filepath, eg. "./My/Path/To/File"
+            var classes = context
+                .NewQuery() // start new query
+                .GetClasses(subClasses: true) // get all classes
+                .WithAttribute("MyAttributeName"); // filter classes by attribute name
+
+            var paths = classes.Select(c => c.SourceFile); // return filepath, eg. "./My/Path/To/File"
+
+            var syntaxNodes = classes.Select(x => x.SyntaxNode);
         }
 
         public void Initialize(GeneratorInitializationContext context)

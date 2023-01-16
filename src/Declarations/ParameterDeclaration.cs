@@ -4,54 +4,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SourceGeneratorBuilder.Declarations
+namespace SourceGeneratorQuery.Declarations
 {
     public class ParameterDeclaration
     {
         public ParameterDeclaration(ParameterSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
         public ParameterDeclaration(FieldDeclarationSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
         public ParameterDeclaration(PropertyDeclarationSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
         public ParameterDeclaration(MemberDeclarationSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
         public ParameterDeclaration(EnumDeclarationSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
 
-        private readonly SyntaxNode node;
+        public readonly SyntaxNode SyntaxNode;
 
-        public bool IsPublic => !(node is ParameterSyntax) &&
+        public bool IsPublic => !(SyntaxNode is ParameterSyntax) &&
             Modifiers.Contains("public");
-        public bool IsProtected => !(node is ParameterSyntax) &&
+        public bool IsProtected => !(SyntaxNode is ParameterSyntax) &&
             Modifiers.Contains("protected");
-        public bool IsInternal => !(node is ParameterSyntax) &&
+        public bool IsInternal => !(SyntaxNode is ParameterSyntax) &&
             Modifiers.Contains("internal");
-        public bool IsPrivate => !(node is ParameterSyntax) &&
+        public bool IsPrivate => !(SyntaxNode is ParameterSyntax) &&
             (Modifiers.Contains("private") ||
             !IsPublic && !IsProtected && !IsInternal);
-        public bool IsReadonly => !(node is ParameterSyntax) &&
+        public bool IsReadonly => !(SyntaxNode is ParameterSyntax) &&
             Modifiers.Contains("readonly");
-        public bool IsStatic => !(node is ParameterSyntax) &&
+        public bool IsStatic => !(SyntaxNode is ParameterSyntax) &&
             Modifiers.Contains("static");
-        public bool IsAbstract => !(node is ParameterSyntax) &&
+        public bool IsAbstract => !(SyntaxNode is ParameterSyntax) &&
             Modifiers.Contains("abstract");
         public IEnumerable<string> Modifiers
         {
             get
             {
                 SyntaxTokenList modifiers = default;
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case MemberDeclarationSyntax x:
                         modifiers = x.Modifiers;
@@ -69,7 +69,7 @@ namespace SourceGeneratorBuilder.Declarations
             get
             {
                 SyntaxList<AttributeListSyntax> attributes = default;
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case MemberDeclarationSyntax x:
                         attributes = x.AttributeLists;
@@ -86,7 +86,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case ParameterSyntax x:
                         return x.Type.ToString();
@@ -105,7 +105,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case ParameterSyntax x:
                         return x.Type.IsNotNull;
@@ -122,7 +122,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case ParameterSyntax x:
                         return x.Identifier.ToString();
@@ -141,7 +141,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case ParameterSyntax x:
                         return x.Default.Value?.ToString();
@@ -158,7 +158,7 @@ namespace SourceGeneratorBuilder.Declarations
         {
             get
             {
-                switch (node)
+                switch (SyntaxNode)
                 {
                     case EnumDeclarationSyntax x:
                         return x.Members.Select(m =>

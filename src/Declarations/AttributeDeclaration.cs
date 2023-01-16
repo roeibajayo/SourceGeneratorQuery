@@ -4,21 +4,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SourceGeneratorBuilder.Declarations
+namespace SourceGeneratorQuery.Declarations
 {
     public class AttributeDeclaration
     {
         public AttributeDeclaration(AttributeSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
 
-        private readonly AttributeSyntax node;
+        public readonly AttributeSyntax SyntaxNode;
 
         public string Name =>
-            node.Name.ToString();
+            SyntaxNode.Name.ToString();
         public IEnumerable<ArgumentDeclaration> Arguments =>
-            node.ArgumentList?.Arguments.Select(a => new ArgumentDeclaration(a)) ??
+            SyntaxNode.ArgumentList?.Arguments.Select(a => new ArgumentDeclaration(a)) ??
             Array.Empty<ArgumentDeclaration>();
     }
 }

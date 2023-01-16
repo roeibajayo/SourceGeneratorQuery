@@ -1,12 +1,12 @@
-﻿using SourceGeneratorBuilder.Declarations;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SourceGeneratorQuery.Declarations;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SourceGeneratorBuilder
+namespace SourceGeneratorQuery
 {
     public class SourceFile
     {

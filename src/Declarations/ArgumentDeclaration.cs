@@ -1,17 +1,17 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace SourceGeneratorBuilder.Declarations
+namespace SourceGeneratorQuery.Declarations
 {
     public class ArgumentDeclaration
     {
         public ArgumentDeclaration(AttributeArgumentSyntax node)
         {
-            this.node = node;
+            this.SyntaxNode = node;
         }
 
-        private readonly AttributeArgumentSyntax node;
+        public readonly AttributeArgumentSyntax SyntaxNode;
 
         public string Expression =>
-            node.Expression.ToString();
+            SyntaxNode.Expression.ToString();
     }
 }

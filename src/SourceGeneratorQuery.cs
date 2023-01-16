@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SourceGeneratorBuilder
+namespace SourceGeneratorQuery
 {
     public class SourceGeneratorQuery
     {
@@ -23,7 +23,7 @@ namespace SourceGeneratorBuilder
         }
     }
 
-    public static class SourceGeneratorBuilderExtentions
+    public static class SourceGeneratorQueryExtentions
     {
         public static IEnumerable<SourceFile> NewQuery(this GeneratorExecutionContext context) =>
             new SourceGeneratorQuery(context).NewQuery();
