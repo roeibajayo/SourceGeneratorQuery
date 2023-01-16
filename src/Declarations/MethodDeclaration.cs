@@ -9,14 +9,14 @@ namespace SourceGeneratorQuery.Declarations
 {
     public class MethodDeclaration
     {
-        public MethodDeclaration(BaseMethodDeclarationSyntax node, MethodDeclaration parent)
+        public MethodDeclaration(BaseMethodDeclarationSyntax node, TypeDeclaration parent)
         {
             this.SyntaxNode = node;
             Parent = parent;
         }
 
         public readonly BaseMethodDeclarationSyntax SyntaxNode;
-        public readonly MethodDeclaration Parent;
+        public readonly TypeDeclaration Parent;
 
         public bool IsPublic
         {
